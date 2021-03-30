@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<!--
+    Secure Message
+    https://afaan.dev/secure-message
+    (c) Afaan Bilal
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Secure Message</title>
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@next/dist/tailwind.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700" rel="stylesheet" />
+    <link rel="shortcut icon" href="assets/favicon.png" type="image/png">
+</head>
+<body class="text-gray-700 bg-white" style="font-family: 'Source Sans Pro', sans-serif">
+
+<!-- app --><div id="app">
+
+<!-- Hero -->
+<div class="pt-5 pb-10 md:py-32" style="background: linear-gradient(110deg, #672ba3 0%,#b3218e 100%)">
+    <div class="container mx-auto px-6">
+        <div class="flex justify-center items-center flex-wrap">
+            <div class="py-5 mx-5 md:mx-10 text-white text-center">
+                <h2 class="text-6xl font-bold mb-4">Secure Message</h2>
+                <p class="text-xl">Send a secure end-to-end encrypted message.</p>
+                <p class="mt-4 text-xl">
+                    Created by <a class="text-bold" href="https://afaan.dev">Afaan Bilal</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Hero -->
+
+<!-- Nav -->
+<nav class="bg-gray-100 py-5">
+    <div class="flex flex-wrap justify-center">
+        <div class="w-full flex justify-center mb-4 md:my-0 md:w-auto px-6 border-b md:border-b-0 md:border-r pb-4 md:py-0">
+            <a href="#encrypt-message">Encrypt a message</a>
+        </div>
+        <div class="w-full flex justify-center mb-4 md:my-0 md:w-auto px-6 border-b md:border-b-0 md:border-r pb-4 md:py-0">
+            <a href="#info">Technical information</a>
+        </div>
+        <div class="w-full flex justify-center mb-4 md:my-0 md:w-auto px-6">
+            <a href="#decrypt-message">Decrypt a message</a>
+        </div>
+    </div>
+</nav>
+<!-- /Nav -->
+
+<!-- encrypt message -->
+<a name="encrypt-message"></a>
+<div class="pt-5 pb-10 md:py-72" style="background: linear-gradient(110deg, #672ba3 0%,#b3218e 100%)">
+    <section class="container mx-auto">
+        <h1 class="text-center text-4xl mb-4">🔐</h1>
+        <h2 class="text-4xl font-bold text-center mb-4 text-white">Encrypt a message</h2>
+        <div class="max-w-xl mx-auto">
+            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="ekey">Key</label>
+                    <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="ekey"
+                        v-model="enc.key"
+                        type="text"
+                        placeholder="Key 🗝">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="emsg">Message</label>
+                    <textarea
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                        rows="6"
+                        id="emsg"
+                        v-model="enc.message"
+                        placeholder="Message">
+                    </textarea>
+                </div>
+                <div class="flex items-center justify-between">
+                    <button
+                        class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        type="button"
+                        @click="encMessage">
+                        Encrypt
+                    </button>
+                    <button
+                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        v-show="enc.encrypted"
+                        type="button"
+                        @click="encReset">
+                        Reset
+                    </button>
+                </div>
+                <div class="my-6" v-show="enc.encrypted">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="ectxt">Encrypted message</label>
+                    <textarea
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                        rows="5"
+                        id="ectxt"
+                        v-model="enc.encrypted"
+                        placeholder="Encrypted message">
+                    </textarea>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+<!-- / encrypt message -->
+
+<!-- Information -->
+<a name="info"></a>
+<div class="bg-gray-200">
+    <section class="container mx-auto pt-5 pb-10 md:py-72">
+        <h2 class="text-4xl font-bold text-center text-gray-800 mt-10 mb-4">Secure message</h2>
+        <p class="text-xl text-center text-gray-500 mb-8">Technical information</p>
+
+        <div class="flex justify-center">
+            <div class="w-1/4">
+                <p class="text-2xl text-gray-500 my-6">
+                    Algorithm: <b>AES</b><br>
+                    Keysize: <b>128 / 192 / 256 bits</b><br>
+                </p>
+                <p class="text-xl text-gray-600 text-justify my-6">
+                    All encryption and decryption happens locally in your browser. The keys or the plain text message are never sent to any servers.<br><br>
+                    The encryption key size is automatically determined based on your key.
+                </p>
+            </div>
+        <div>
+    </section>
+</div>
+<!-- / Information -->
+
+<!-- Decrypt message -->
+<a name="decrypt-message"></a>
+<div class="pt-5 pb-10 md:py-72" style="background: linear-gradient(110deg, #672ba3 0%,#b3218e 100%)">
+    <section class="container mx-auto">
+        <h1 class="text-center text-4xl mb-4">🔓</h1>
+        <h2 class="text-4xl font-bold text-center mb-4 text-white">Decrypt a message</h2>
+        <div class="max-w-xl mx-auto">
+            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <div v-show="decError" class="bg-red-700 text-white rounded py-2 my-2">
+                    <p class="text-md text-center" v-text="decError"></p>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="dkey">Key</label>
+                    <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="dkey"
+                        v-model="dec.key"
+                        type="text"
+                        placeholder="Key 🗝">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="dmsg">Encrypted message</label>
+                    <textarea
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                        rows="6"
+                        id="dmsg"
+                        v-model="dec.encrypted"
+                        placeholder="Encrypted message">
+                    </textarea>
+                </div>
+                <div class="flex items-center justify-between">
+                    <button
+                        class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        type="button"
+                        @click="decMessage">
+                        Decrypt
+                    </button>
+                    <button
+                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        v-show="dec.message"
+                        type="button"
+                        @click="decReset">
+                        Reset
+                    </button>
+                </div>
+                <div class="my-6" v-show="dec.message">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="dctxt">Decrypted message</label>
+                    <textarea
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                        rows="5"
+                        id="dctxt"
+                        v-model="dec.message"
+                        placeholder="Decrypted message">
+                    </textarea>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+<!-- / Decrypt message -->
+
+
+<!-- Footer -->
+<footer class="bg-gray-100">
+    <div class="container mx-auto px-6 pt-10 pb-6">
+        <div class="flex flex-wrap">
+            <div class="w-full md:w-1/2 text-center md:text-left">
+                <h5 class="uppercase mb-6 font-bold">Links</h5>
+                <ul class="mb-4">
+                    <li class="mt-2">
+                        <a href="https://github.com/AfaanBilal" class="text-gray-600 hover:text-purple-500" target="_blank" rel="noopener">GitHub</a>
+                    </li>
+                    <li class="mt-2">
+                        <a href="https://linkedin.com/in/AfaanBilal" class="text-gray-600 hover:text-purple-500" target="_blank" rel="noopener">LinkedIn</a>
+                    </li>
+                    <li class="mt-2">
+                        <a href="https://medium.com/@AfaanBilal" class="text-gray-600 hover:text-purple-500" target="_blank" rel="noopener">Medium</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="w-full md:w-1/2 text-center md:text-left">
+                <h5 class="uppercase mb-6 font-bold">Social</h5>
+                <ul class="mb-4">
+                    <li class="mt-2">
+                        <a href="https://instagram.com/AfaanBilal" class="text-gray-600 hover:text-purple-500" target="_blank" rel="noopener">Instagram</a>
+                    </li>
+                    <li class="mt-2">
+                        <a href="https://twitter.com/AfaanBilal" class="text-gray-600 hover:text-purple-500" target="_blank" rel="noopener">Twitter</a>
+                    </li>
+                    <li class="mt-2">
+                        <a href="https://facebook.com/AfaanBilal" class="text-gray-600 hover:text-purple-500" target="_blank" rel="noopener">Facebook</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- / Footer -->
+
+<div class="text-center text-white py-2" style="background: linear-gradient(110deg, #672ba3 0%,#b3218e 100%)">
+    Copyright &copy; Afaan Bilal
+</div>
+
+</div><!-- /app -->
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js" integrity="sha512-nOQuvD9nKirvxDdvQ9OMqe2dgapbPB7vYAMrzJihw5m+aNcf0dX53m6YxM4LgA9u8e9eg9QX+/+mPu8kCNpV2A==" crossorigin="anonymous"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/aes.min.js" integrity="sha512-eqbQu9UN8zs1GXYopZmnTFFtJxpZ03FHaBMoU3dwoKirgGRss9diYqVpecUgtqW2YRFkIVgkycGQV852cD46+w==" crossorigin="anonymous"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
+<script src="assets/main.js"></script>
+</body>
+</html>
