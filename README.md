@@ -2,6 +2,7 @@ Secure Message
 ==============
 
 Link: **[Secure Message](https://afaan.dev/secure-message)**
+
 Author: **[Afaan Bilal](https://afaan.dev)**
 
 ## Introduction
